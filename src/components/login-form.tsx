@@ -35,14 +35,15 @@ export function LoginForm({
 
       // Handle successful login
       if (response && response.access_token) {
-        localStorage.setItem("access_token", response.access_token);
+        sessionStorage.setItem("access_token", response.access_token);
+        sessionStorage.setItem("refresh_token", response.refresh_token || "");
 
-        if (response.refresh_token) {
-          localStorage.setItem("refresh_token", response.refresh_token);
-        }
+        // if (response.refresh_token) {
+        //   localStorage.setItem("refresh_token", response.refresh_token);
+        // }
 
         if (response.user) {
-          localStorage.setItem("user", JSON.stringify(response.user));
+          sessionStorage.setItem("user", JSON.stringify(response.user));
         }
 
         // Redirect to dashboard
@@ -65,40 +66,40 @@ export function LoginForm({
   };
 
   // Alternative button handler as a backup approach
-  const handleLoginClick = async () => {
-    setIsLoading(true);
-    setError(null);
+  // const handleLoginClick = async () => {
+  //   setIsLoading(true);
+  //   setError(null);
 
-    try {
-      const credentials = { email, password };
-      console.log("Attempting login with:", email);
-      const response = await login(credentials);
-      console.log("Login successful:", response);
+  //   try {
+  //     const credentials = { email, password };
+  //     console.log("Attempting login with:", email);
+  //     const response = await login(credentials);
+  //     console.log("Login successful:", response);
 
-      // Handle successful login
-      if (response && response.access_token) {
-        localStorage.setItem("access_token", response.access_token);
+  //     // Handle successful login
+  //     if (response && response.access_token) {
+  //       localStorage.setItem("access_token", response.access_token);
 
-        if (response.refresh_token) {
-          localStorage.setItem("refresh_token", response.refresh_token);
-        }
+  //       if (response.refresh_token) {
+  //         localStorage.setItem("refresh_token", response.refresh_token);
+  //       }
 
-        if (response.user) {
-          localStorage.setItem("user", JSON.stringify(response.user));
-        }
+  //       if (response.user) {
+  //         localStorage.setItem("user", JSON.stringify(response.user));
+  //       }
 
-        // Redirect to dashboard
-        router.push("/dashboard");
-      } else {
-        throw new Error("Invalid response from server");
-      }
-    } catch (error: any) {
-      console.error("Login error:", error);
-      setError(error.message || "Invalid email or password. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //       // Redirect to dashboard
+  //       router.push("/dashboard");
+  //     } else {
+  //       throw new Error("Invalid response from server");
+  //     }
+  //   } catch (error: any) {
+  //     console.error("Login error:", error);
+  //     setError(error.message || "Invalid email or password. Please try again.");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -170,7 +171,7 @@ export function LoginForm({
                 type="button"
                 className="w-full bg-blue-500 hover:bg-blue-300"
                 disabled={isLoading}
-                onClick={handleLoginClick}
+                onClick={handleSubmit}
               >
                 {isLoading ? "Logging In..." : "Login"}
               </Button>
