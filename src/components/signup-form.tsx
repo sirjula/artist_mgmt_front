@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signUp } from "@/api/api";
 import { useState } from "react";
+import Link from "next/link";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -23,7 +24,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     dob: "",
     gender: "",
     address: "",
-    role_type: "", // Default role
+    role_type: "", 
   })
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -35,10 +36,6 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     setuserData((prev) => ({ ...prev, [name]: value }))
   }
 
-  // const handleSelectChange = (name: string, value: string) => {
-  //   setFormData((prev) => ({ ...prev, [name]: value }))
-  // }
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
@@ -47,7 +44,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 
     try {
       console.log("Attempting signup with:", userData)
-      const response = await signUp(userData)
+      const response = await signUp({ ...userData, role: userData.role_type })
       console.log("Signup successful:", response)
 
 
@@ -57,7 +54,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
       return;
     }
      
-        router.push("/login")
+        router.push("/")
     } catch (error) {
       console.error("Signup error:", error)
       if (error instanceof Error) {
@@ -258,9 +255,12 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 
               <div className="text-center text-sm">
                 Already have an account?{" "}
-                <a href="/login" className="underline underline-offset-4">
-                  Login
-                </a>
+                <Link
+                href="/"
+                className="underline underline-offset-4 "
+              >
+                Login
+              </Link>
               </div>
             </div>
           </form>
